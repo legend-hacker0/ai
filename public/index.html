@@ -2521,9 +2521,10 @@ Clear Leaderboard
 </div>
 </div>
 
-<audio id="bgMusic"></audio>
+<audio id="bgMusic" preload="auto"></audio>
 
 <script>
+
 const bgMusic = document.getElementById("bgMusic");
 
 const bgmPlaylist = [
@@ -2535,28 +2536,87 @@ const bgmPlaylist = [
 ];
 
 let bgmIndex = 0;
+let bgmChanging = false;
 
 function playBGM() {
 
     if (!bgmPlaylist.length) return;
 
+    bgmChanging = true;
+
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+
     bgMusic.src = bgmPlaylist[bgmIndex];
+
     bgMusic.load();
 
     const playPromise = bgMusic.play();
 
     if (playPromise !== undefined) {
-        playPromise.catch(() => {});
+        playPromise.catch(function(error) {
+            console.log("BGM playback error:", error);
+        });
     }
+
+    setTimeout(function() {
+        bgmChanging = false;
+    }, 2000);
 }
 
+
+function nextBGM() {
+
+    if (bgmChanging) return;
+
+    bgmChanging = true;
+
+    bgmIndex++;
+
+    if (bgmIndex >= bgmPlaylist.length) {
+        bgmIndex = 0;
+    }
+
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+
+    bgMusic.src = bgmPlaylist[bgmIndex];
+
+    bgMusic.load();
+
+    const playPromise = bgMusic.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(function(error) {
+            console.log("BGM next-song playback error:", error);
+        });
+    }
+
+    setTimeout(function() {
+        bgmChanging = false;
+    }, 2000);
+}
+
+
+/* Normal end detection */
 bgMusic.addEventListener("ended", function() {
-
-    bgmIndex = (bgmIndex + 1) % bgmPlaylist.length;
-
-    playBGM();
-
+    nextBGM();
 });
+
+
+/* Backup end detection */
+setInterval(function() {
+
+    if (
+        !bgmChanging &&
+        bgMusic.src &&
+        bgMusic.ended
+    ) {
+        nextBGM();
+    }
+
+}, 250);
+
 </script>
 
 
