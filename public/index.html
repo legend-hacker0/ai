@@ -2510,23 +2510,30 @@ Clear Leaderboard
 const bgMusic = document.getElementById("bgMusic");
 
 const bgmPlaylist = [
-"song1.mp3",
-"song2.mp3",
-"song3.mp3",
-"song4.mp3"
+    "freefire-bgm.mp3",
+    "song2.mp3",
+    "song3.mp3",
+    "song4.mp3",
+    "song5.mp3"
 ];
 
 let bgmIndex = 0;
 
-function playBGM(){
+function playBGM() {
     bgMusic.src = bgmPlaylist[bgmIndex];
-    bgMusic.play().catch(()=>{});
+    bgMusic.load();
+
+    const playPromise = bgMusic.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+    }
 }
 
-bgMusic.addEventListener("ended",function(){
+bgMusic.addEventListener("ended", function() {
     bgmIndex++;
 
-    if(bgmIndex >= bgmPlaylist.length){
+    if (bgmIndex >= bgmPlaylist.length) {
         bgmIndex = 0;
     }
 
