@@ -655,9 +655,25 @@ function toggleMusic(){
 const music =
 document.getElementById("bgMusic");
 
+if(!music)return;
+
 if(music.paused){
 
-music.play();
+if(!music.src || !music.currentSrc){
+
+playBGM();
+
+}else{
+
+const playPromise = music.play();
+
+if(playPromise !== undefined){
+
+playPromise.catch(() => {});
+
+}
+
+}
 
 }else{
 
@@ -2511,7 +2527,7 @@ Clear Leaderboard
 const bgMusic = document.getElementById("bgMusic");
 
 const bgmPlaylist = [
-    "freefire-bgm.mp3",
+    "song1.mp3",
     "song2.mp3",
     "song3.mp3",
     "song4.mp3",
