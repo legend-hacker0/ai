@@ -2527,7 +2527,7 @@ Clear Leaderboard
 const bgMusic = document.getElementById("bgMusic");
 
 const bgmPlaylist = [
-    "song1.mp3",
+    "freefire-bgm.mp3",
     "song2.mp3",
     "song3.mp3",
     "song4.mp3",
@@ -2537,6 +2537,9 @@ const bgmPlaylist = [
 let bgmIndex = 0;
 
 function playBGM() {
+
+    if (!bgmPlaylist.length) return;
+
     bgMusic.src = bgmPlaylist[bgmIndex];
     bgMusic.load();
 
@@ -2548,13 +2551,11 @@ function playBGM() {
 }
 
 bgMusic.addEventListener("ended", function() {
-    bgmIndex++;
 
-    if (bgmIndex >= bgmPlaylist.length) {
-        bgmIndex = 0;
-    }
+    bgmIndex = (bgmIndex + 1) % bgmPlaylist.length;
 
     playBGM();
+
 });
 </script>
 
