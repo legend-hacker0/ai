@@ -2504,9 +2504,35 @@ Clear Leaderboard
 </div>
 </div>
 
-<audio id="bgMusic" loop>
-  <source src="freefire-bgm.mp3" type="audio/mpeg">
-  </audio>
+<audio id="bgMusic"></audio>
+
+<script>
+const bgMusic = document.getElementById("bgMusic");
+
+const bgmPlaylist = [
+"song1.mp3",
+"song2.mp3",
+"song3.mp3",
+"song4.mp3"
+];
+
+let bgmIndex = 0;
+
+function playBGM(){
+    bgMusic.src = bgmPlaylist[bgmIndex];
+    bgMusic.play().catch(()=>{});
+}
+
+bgMusic.addEventListener("ended",function(){
+    bgmIndex++;
+
+    if(bgmIndex >= bgmPlaylist.length){
+        bgmIndex = 0;
+    }
+
+    playBGM();
+});
+</script>
 
 
 <!-- HACKER AI 7-UPGRADE HUB -->
